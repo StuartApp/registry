@@ -22,6 +22,7 @@ import com.hortonworks.registries.schemaregistry.SchemaCompatibility;
 import com.hortonworks.registries.schemaregistry.SchemaFieldInfo;
 import com.hortonworks.registries.schemaregistry.errors.InvalidSchemaException;
 import com.hortonworks.registries.schemaregistry.errors.SchemaNotFoundException;
+import org.apache.avro.JsonProperties;
 import org.apache.avro.Schema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -181,9 +182,13 @@ public class AvroSchemaProvider extends AbstractSchemaProvider {
                     appendable.append("{\"name\":\"").append(field.name()).append("\"").append(",\"type\":");
 
                     // handle default value
-                    Object defaultValue = String.valueOf(field.defaultValue().asText());
+                    Object defaultValue = field.defaultVal();
                     if (defaultValue != null) {
-                        appendable.append(defaultValue.toString());
+                        if (defaultValue == JsonProperties.NULL_VALUE) {
+                            appendable.append("null");
+                        } else {
+                            appendable.append(defaultValue.toString());
+                        }
                     }
 
                     build(env, field.schema(), appendable).append("}");
