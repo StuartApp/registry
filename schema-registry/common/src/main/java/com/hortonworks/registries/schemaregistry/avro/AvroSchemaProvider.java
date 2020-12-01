@@ -181,7 +181,7 @@ public class AvroSchemaProvider extends AbstractSchemaProvider {
                     appendable.append("{\"name\":\"").append(field.name()).append("\"").append(",\"type\":");
 
                     // handle default value
-                    Object defaultValue = field.defaultValue().asText();
+                    Object defaultValue = String.valueOf(field.defaultValue().asText());
                     if (defaultValue != null) {
                         appendable.append(defaultValue.toString());
                     }
